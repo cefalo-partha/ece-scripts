@@ -37,7 +37,7 @@ function set_up_mariadb_yum_repo() {
     local arch=amd64
     if [[ $(uname -m) != "x86_64" ]]; then
       arch=x86
-    fi  
+    fi
     if [ $distributor = "redhatenterpriseserver" ]; then
       $distributor=rhel
     fi
@@ -56,31 +56,31 @@ EOF
 
 function set_up_redhat_repository_if_possible() {
   if [ $db_vendor = "mariadb" ]; then
-    set_up_mariadb_yum_repo  
+    set_up_mariadb_yum_repo
     mysql_server_packages="MariaDB-server"
     mysql_client_packages="MariaDB-client"
   else
     print_and_log "Setting up the Percona repository ..."
-  
+
     if [ $(rpm -qa | grep $percona_rpm_release_package_name | wc -l) -lt 1 ]; then
       run rpm -Uhv $percona_rpm_release_url
     fi
     mysql_server_packages="Percona-Server-server-55 Percona-Server-shared-compat"
     mysql_client_packages="Percona-Server-client-55 Percona-Server-shared-compat"
-  fi  
+  fi
 }
 
 function is_supported() {
   local code_name=$1
   local supported_code_name=1
   local supported_list=""
-  
+
   if [ $db_vendor = "mariadb" ]; then
     supported_list=$(get_mariadb_supported_list)
   else
     supported_list=$(get_percona_supported_list)
   fi
-  
+
   for el in $supported_list; do
     if [[ $code_name == $el ]]; then
       supported_code_name=0
@@ -100,7 +100,7 @@ function add_gpg_key() {
     gpg --keyserver hkp://keys.gnupg.net:80 \
         --recv-keys $key \
         1>>$log 2>>$log
-    
+
         # There has been three times now, during six months, that the
         # key cannot be retrieved from keys.gnupg.net. Therefore,
         # we're checking if it failed and if yes, force the package
@@ -116,7 +116,7 @@ function add_gpg_key() {
           apt-key add - \
           1>>$log 2>>$log
     fi
-    
+
   fi
 }
 
@@ -171,9 +171,9 @@ function set_up_repository_if_possible() {
         "name $code_name. " \
         "I will use vanilla MySQL instead."
 
-      mysql_server_packages="mysql-server libmysqlclient16"
-      mysql_client_packages="mysql-client libmysqlclient16"
-      
+      mysql_server_packages="mysql-server libmysqlclient18"
+      mysql_client_packages="mysql-client libmysqlclient18"
+
       leave_trail "trail_db_vendor=mysql"
     fi
   elif [ $on_redhat_or_derivative -eq 1 ]; then
@@ -198,7 +198,7 @@ function install_mysql_server_software() {
     # when only running the SQL scripts, typically when using Amazon
     # RDS, we need the mysql-client.
     install_packages_if_missing $mysql_client_packages
-  fi  
+  fi
 }
 
 function install_mysql_client_software() {
@@ -373,7 +373,7 @@ EOF
   fi
 
   set_common_replication_settings $file
-  
+
   # replication log configuration of the master
   if [ $db_master -eq 1 ]; then
     old="#server-id.*=.*1"
@@ -408,7 +408,7 @@ EOF
     fi
 
   fi
-  
+
   run /etc/init.d/mysql restart
 }
 
@@ -417,7 +417,7 @@ EOF
 ## over to the slave as master (and back again).
 function set_common_replication_settings() {
   local file=$1
-  
+
   local old="bind-address.*= 127.0.0.1"
   local new="# bind-address = 127.0.0.1"
   if [ $(grep ^"${old}" $file | wc -l) -gt 0 ]; then
@@ -440,7 +440,7 @@ function set_common_replication_settings() {
   elif [ $(grep ^"$new" $file | wc -l) -lt 1 ]; then
     echo "$new" >> $file
   fi
-}  
+}
 
 function set_slave_to_replicate_master() {
   print_and_log "Setting slave to replicate master DB @ $db_master_host ..."
@@ -467,10 +467,10 @@ EOF
         "doesn't exist"
       remove_pid_and_exit_in_error
     fi
-    
+
     print_and_log "Setting up slave based on master backup"
     zcat ${fai_db_master_backup} | mysql ${db_schema}
-    
+
     local file_and_pos=$(
       zcat ${fai_db_master_backup} | \
         head -n 30 | \
@@ -493,7 +493,7 @@ start slave;
 EOF
 
   fi
-  
+
   add_next_step "DB on $HOSTNAME replicates master DB @ ${db_master_host}"
 }
 
@@ -624,24 +624,24 @@ function create_ecedb() {
     run_eae_scripts_if_available
     return
   fi
-  
+
   # first the ECE SQL ...
   run_db_scripts $ece_home/database/$db_product
-  
+
   # ... then, find the plugins and run their SQL scripts
   for archive in $technet_download_list; do
     # don't re-run the engine scripts
     if [[ $(basename ${archive}) == engine* ]]; then
       continue
     fi
-    
+
     # find the top directory inside the archive
     local dir=$(
       unzip -t ${download_dir}/$(basename ${archive}) | \
         head -2 | \
         awk '{print $2}' | \
         tail -1 | \
-        cut -d'/' -f1      
+        cut -d'/' -f1
     )
 
     # should always be one
@@ -667,7 +667,7 @@ function run_eae_scripts_if_available() {
 }
 
 ## Workaround for: https://jira.vizrt.com/browse/STATS-76
-## 
+##
 ## $1 is the SQL file
 function work_around_eae_bug_stats-76() {
   print_and_log "Fixing $1 ..."
@@ -723,7 +723,7 @@ mysqldump \\
   gzip --rsyncable -9 - \\
   > ${escenic_backups_dir}/\${fn}
 
-# (2) make sure the backup went OK 
+# (2) make sure the backup went OK
 # copy of pipe status since it's volatile
 pipe_status=(\${PIPESTATUS[@]})
 

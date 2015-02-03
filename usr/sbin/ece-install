@@ -86,22 +86,18 @@ ece_software_setup_completed=0
 # For ECE 5.5
 ############################################################################
 technet_download_list="
-  http://technet.escenic.com/downloads/release/55/analysis-engine-2.5.0.131590.zip
-  http://technet.escenic.com/downloads/release/55/assemblytool-2.0.4.jar
-  http://technet.escenic.com/downloads/release/55/community-engine-3.8.1.132399.zip
-  http://technet.escenic.com/downloads/release/55/engine-5.5.0.131978.zip
-  http://technet.escenic.com/downloads/release/55/forum-3.2.1.132293.zip
-  http://technet.escenic.com/downloads/release/55/geocode-2.4.1.130693.zip
-  http://technet.escenic.com/downloads/release/55/lucy-4.2.1.129603.zip
-  http://technet.escenic.com/downloads/release/55/menu-editor-2.1.1.128528.zip
-  http://technet.escenic.com/downloads/release/55/online-graphics-1.0.1.133123.zip
-  http://technet.escenic.com/downloads/release/55/poll-2.3.0.128547.zip
-  http://technet.escenic.com/downloads/release/55/vcpeditor-1.0.0.132434.zip
-  http://technet.escenic.com/downloads/release/55/video-1.2.1.132710.zip
+  http://technet.escenic.com/downloads/release/57/analysis-engine-2.8.0.158573.zip
+  http://technet.escenic.com/downloads/release/57/assemblytool-2.0.7.zip
+  http://technet.escenic.com/downloads/release/57/engine-5.7.36.162749.zip
+  http://technet.escenic.com/downloads/release/57/forum-3.4.0.148632.zip
+  http://technet.escenic.com/downloads/release/57/geocode-2.8.0.148641.zip
+  http://technet.escenic.com/downloads/release/57/lucy-4.4.1.153407.zip
+  http://technet.escenic.com/downloads/release/57/xml-editor-2.5.0.149301.zip
+  http://technet.escenic.com/downloads/release/57/menu-editor-2.3.0.149305.zip
+  http://technet.escenic.com/downloads/release/57/poll-2.5.2.158649.zip
 "
 wf_download_list="
-  http://technet.escenic.com/downloads/release/55/framework-dist-2.0.2.131581.zip
-  http://technet.escenic.com/downloads/release/55/framework-community-dist-2.0.2.131581.zip
+  http://technet.escenic.com/downloads/release/56/widget-framework-core-2.1.0.139063.zip
 "
 ############################################################################
 
@@ -195,7 +191,7 @@ function download_escenic_components()
           metadata=$(curl -s $repo/$(dirname $el)/maven-metadata.xml)
           local timestamp=$(xmlstarlet <<< "$metadata" sel -t -m /metadata/versioning/snapshot/timestamp -c 'text()')
           local buildnumber=$(xmlstarlet <<< "$metadata"  sel -t -m /metadata/versioning/snapshot/buildNumber -c 'text()')
-          #Now Check the the timestamp and buildnumber is not empty. If not then create the dist name with timestamp and buildnumber. 
+          #Now Check the the timestamp and buildnumber is not empty. If not then create the dist name with timestamp and buildnumber.
           if [[ -n $timestamp && -n $buildnumber ]]; then
           log "Found SNAPSHOT with $timestamp-$buildnumber in $el"
           el=$(dirname $el)/${name/SNAPSHOT/$timestamp-$buildnumber}

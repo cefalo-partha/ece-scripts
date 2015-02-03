@@ -9,7 +9,7 @@ function set_up_jdbc_library() {
         .
     mv mariadb mariadb-java-client-1.1.0.jar
   else
-    make_ln /usr/share/java/mysql-connector-java.jar      
+    make_ln /usr/share/java/mysql-connector-java.jar
   fi
 }
 
@@ -175,23 +175,22 @@ function set_up_app_server() {
   if [ ! -z $db_vendor ] && [ $db_vendor = "mariadb" ]; then
     jdbc_package_name=org.mariadb.jdbc.Driver
   fi
-  
+
   cat > $tomcat_base/conf/server.xml <<EOF
 <?xml version='1.0' encoding='utf-8'?>
 <Server port="$shutdown_port" shutdown="SHUTDOWN">
+  <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
   <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
-  <Listener className="org.apache.catalina.core.JasperListener" />
   <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
   <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+  <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
 
   <GlobalNamingResources>
-    <Resource name="UserDatabase"
-              auth="Container"
-              type="org.apache.catalina.UserDatabase"
-              description="User database that can be updated and saved"
-              factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
-              pathname="conf/tomcat-users.xml"
-    />
+    <Resource name="UserDatabase" auth="Container"
+            type="org.apache.catalina.UserDatabase"
+            description="User database that can be updated and saved"
+            factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
+            pathname="conf/tomcat-users.xml" />
 EOF
   if [ $install_profile_number -ne $PROFILE_ANALYSIS_SERVER \
     -a $install_profile_number -ne $PROFILE_SEARCH_SERVER ]; then

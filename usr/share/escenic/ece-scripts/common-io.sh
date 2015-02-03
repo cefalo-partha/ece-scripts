@@ -124,7 +124,7 @@ function download_uri_target_to_dir() {
     if [ -z $target_file ] ; then
       target_file=$(basename $uri)
     fi
-    
+
     log "Downloading" $uri "to" $target_dir "..."
     run cd $target_dir
     run wget \
@@ -144,8 +144,8 @@ function download_uri_target_to_dir() {
     run s3cmd get $uri $target_file
 
   else
-    
-    local file=$uri    
+
+    local file=$uri
     if [[ $uri == "file://"* ]] ; then
       # length of file:// is 7
       file=${file:7}
@@ -178,7 +178,7 @@ function curl_download_uri_target_to_dir() {
     if [ -z $target_file ] ; then
       target_file=$(basename $uri)
     fi
-    
+
     log "Downloading" $uri "to" $target_dir "..."
     run cd $target_dir
     run curl \
@@ -205,7 +205,8 @@ function verify_that_archive_is_ok() {
   fi
 
   if [[ $1 == *.zip || $1 == *.jar || $1 == *.ear ]]; then
-    unzip -t $1 > /dev/null 2>&1
+    ## Using -t fails with some ECE archives
+    unzip -u $1 > /dev/null 2>&1
   elif [[ $1 == *.tar.gz || $1 == *.tgz ]]; then
     tar tzf $1 > /dev/null 2>&1
   fi

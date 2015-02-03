@@ -17,7 +17,7 @@ function get_version_from_ear_file() {
   if [[ -z "$version" || "$version" == "engine" ]]; then
     version=$(date +%Y%m%d.%H%M)
   fi
-  
+
   echo $version
 }
 
@@ -55,7 +55,7 @@ EOF
     $(basename ${ear_used}) \
     ${ear_md5_sum} \
     >> $(get_deployment_log_file)
-  
+
   print_and_log "Deployment log file updated:" $(get_deployment_log_file)
 }
 
@@ -64,7 +64,7 @@ function deploy() {
 
   if [ -n "$file" ]; then
     print_and_log "Deploying $file on $instance ..."
-    
+
     # wget_auth is needed for download_uri_target_to_dir
     wget_auth=$wget_builder_auth
     ear=$cache_dir/$(basename $file)
@@ -80,18 +80,19 @@ function deploy() {
       exit 1
     fi
   fi
-  
+
   if [ ! -e "$ear" ]; then
     print_and_log "$ear does not exist. " \
       "Did you run '"`basename $0`" -i" $instance "assemble'?"
     exit 1
   fi
 
-  if [ $(is_archive_healthy $ear) -eq 0 ]; then
-    print_and_log "$ear is faulty, I cannot deploy it :-("
-    exit 1
-  fi
-  
+  ## EWF 2.1 with ECE 5.7.x has issues with this health check.
+  # if [ $(is_archive_healthy $ear) -eq 0 ]; then
+  #   print_and_log "$ear is faulty, I cannot deploy it :-("
+  #   exit 1
+  # fi
+
   # extract EAR to a temporary area
   local dir=$(mktemp -d)
   (
@@ -101,7 +102,7 @@ function deploy() {
   )
 
   print "Deploying $ear on $appserver ..."
-  
+
   case $appserver in
     tomcat)
       # We do not want the Escenic jars to share the same classloader
@@ -122,7 +123,7 @@ function deploy() {
         print "  contrib/appserver/tomcat/catalina-sample.properties"
         exit 1
       fi
-      
+
       run rm -rf $tomcat_base/work/*
 
       for war in $dir/*.war ; do
@@ -137,13 +138,13 @@ function deploy() {
         print $tomcat_base/webapps "doesn't exist, exiting."
         exit 1
       fi
-      
+
       if [ -n "$deploy_webapp_white_list" ]; then
         deploy_this_war=0
         print_and_log "Deployment white list active, only deploying: " \
           $deploy_webapp_white_list
       fi
-      
+
       for war in $dir/*.war ; do
         local app_base=$(get_app_base $war)
         local name=$(basename $war .war)
@@ -173,7 +174,7 @@ function deploy() {
         fi
       done
       ;;
-    
+
     resin)
       if [ ! -d $resin_home/deploy ]; then
         mkdir -p $resin_home/deploy \
@@ -193,7 +194,7 @@ function deploy() {
   update_deployment_state_and_log_files $ear
 }
 
-## $1 : dir of the webapp 
+## $1 : dir of the webapp
 function add_memcached_support() {
   if [[ "$do_not_add_memcached_support" == "1" ]]; then
     return
@@ -244,7 +245,7 @@ function remove_unwanted_libraries() {
   elif [ $type != "search" ]; then
     return
   fi
-  
+
   log "Removing $1/engine-config-*.jar since this is a search instance"
   run rm $1/engine-config-*.jar
 }

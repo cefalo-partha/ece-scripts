@@ -216,7 +216,7 @@ function create_ear_download_list() {
     # or com.escenic.plugins.forum:forum:zip:3.2.1.132293
     # groupid:artifactid:[packaging:[classifier:]]version
 
-    # chomp groupid: --> artifactid:[packaging:[classifier:]]version 
+    # chomp groupid: --> artifactid:[packaging:[classifier:]]version
     groupid=${coordinate/:*}
     coordinate=${coordinate#${groupid}:}
 
@@ -560,7 +560,7 @@ EOF
   fi
 
   file=$common_nursery_dir/com/escenic/webstart/StudioConfig.properties
-  
+
   cat >> $file <<EOF
 # This font have been tested and works with (at least): English,
 # Norwegian & Tamil. The font comes with (at least) MS Office and OS X

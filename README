@@ -1,4 +1,10 @@
 ========
+WARNING
+==========
+
+THIS IS A FORK FOR MYSELF (cefalo-partha) TO TEST THESE SCRIPTS ON ECE v5.7.x. THERE IS ABSOLUTELY NO GUARANTEE WHAT MAY HAPPEN IF YOU USE THESE. Everything including and upto your computer being exploded is possible.
+
+========
 Note!
 ========
 This version of ece-scripts is currently being modified to support java7, tomcat7 and content engine 5.6. During this transition the latest version of ece-scripts will not work correctly for previously released engine versions.
