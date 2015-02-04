@@ -12,7 +12,7 @@ function install_ece_scripts_with_git() {
   else
     run git clone $ece_scripts_git_source
   fi
-  
+
   run cp -r ece-scripts/usr/* /usr/
   run cp -r ece-scripts/etc/bash_completion.d/ece /etc/bash_completion.d/
   run cp -r ece-scripts/etc/init.d/* /etc/init.d/
@@ -25,7 +25,7 @@ function install_ece_scripts_with_git() {
     fi
     run cp $el /etc/default/
   done
-  
+
   for el in ece-scripts/etc/escenic/*; do
     local file=/etc/escenic/$(basename $el)
     if [ -e $file ]; then
@@ -40,11 +40,7 @@ function set_up_ece_scripts()
 {
   print_and_log 'Setting up the ece UNIX scripts ...'
 
-  if [ $on_debian_or_derivative -eq 1 ]; then
-    install_packages_if_missing escenic-content-engine-scripts
-  else
-    install_ece_scripts_with_git
-  fi
+  install_ece_scripts_with_git
 
   local file=${escenic_conf_dir}/ece.conf
   local example_ece_conf=/usr/share/doc/escenic/escenic-content-engine-scripts/examples/etc/ece.conf
@@ -63,7 +59,7 @@ function set_up_ece_scripts()
         "provide a valid ece.conf yourself, e.g. with a conf package"
     fi
   fi
-  
+
   set_conf_file_value assemblytool_home ${escenic_root_dir}/assemblytool $file
   set_conf_file_value backup_dir ${escenic_backups_dir} $file
   set_conf_file_value cache_dir ${escenic_cache_dir} ${file}
