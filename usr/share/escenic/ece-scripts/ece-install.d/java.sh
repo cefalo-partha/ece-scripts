@@ -35,7 +35,12 @@ function install_oracle_java(){
   run add-apt-repository -y ppa:webupd8team/java
   run apt-get update
   echo "$debian_package_name shared/accepted-oracle-license-v1-1 boolean true" | debconf-set-selections
+
+  ## The webupd8team packages may not be signed properly.
+  local old_force_packages=${force_packages-0}
+  force_packages=1
   install_packages_if_missing $debian_package_name
+  force_packages=${old_force_packages}
 }
 
 function install_sun_java_on_redhat() {
