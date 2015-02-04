@@ -3,7 +3,7 @@ sun_java_bin_url=http://download.oracle.com/otn-pub/java/jdk/6u39-b04/jdk-6u39-l
 if [[ $(uname -m) == "x86_64" ]]; then
   sun_java_bin_url=http://download.oracle.com/otn-pub/java/jdk/6u39-b04/jdk-6u39-linux-x64.bin
 fi
-  
+
 # Install oracle java from webupd8
 # http://www.webupd8.org/2012/01/install-oracle-java-jdk-7-in-ubuntu-via.html
 function install_oracle_java(){
@@ -27,6 +27,11 @@ function install_oracle_java(){
   fi
 
   install_packages_if_missing python-software-properties software-properties-common
+
+  ## As it turns out, we fail with the webup8 repository quite often. So,
+  ## Trying out a recommended work around.
+  run apt-get install --reinstall ca-certificates
+
   run add-apt-repository -y ppa:webupd8team/java
   run apt-get update
   echo "$debian_package_name shared/accepted-oracle-license-v1-1 boolean true" | debconf-set-selections
@@ -39,7 +44,7 @@ function install_sun_java_on_redhat() {
     print_and_log "Sun Java is already installed on $HOSTNAME"
     return
   fi
-  
+
   print_and_log "Downloading Sun Java from download.oracle.com ..."
   run cd $download_dir
   local file_name=$(basename $sun_java_bin_url)
@@ -53,7 +58,7 @@ function install_sun_java_on_redhat() {
   local zipstart=$(unzip -ql $file_name 2>&1 >/dev/null | \
       sed -n -e 's/.* \([0-9][0-9]*\) extra bytes.*/\1/p');
   tail -c $(expr $binsize - $zipstart) $file_name > $tmp_jdk
-  
+
   run cd /opt
   run unzip -q -o $download_dir/$tmp_jdk
   local latest_jdk=$(find . -maxdepth 1 -type d -name "jdk*" | sort -r | head -1)
@@ -79,13 +84,10 @@ function install_sun_java_on_redhat() {
 
   # setting java_home to the newly installed location
   java_home=/opt/jdk
-  
+
   local version=$(java -version 2>&1 | grep version | cut -d'"' -f2)
   print_and_log "Sun Java $version is now installed in /opt/jdk"
 
   add_next_step "By using Sun Java, you must accept this license: " \
     "http://www.oracle.com/technetwork/java/javase/terms/license/"
 }
-
-
-
