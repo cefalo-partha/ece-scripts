@@ -188,14 +188,14 @@ function get_total_memory_in_mega_bytes() {
 ## $@ :: the apt line to be added if it's not already present.
 function add_apt_source() {
   # first, check that the base URL in the sources list returns 200,
-  # only allow 20 seconds for this test. If the URL doesn't return
+  # only allow 60 seconds for this test. If the URL doesn't return
   # 200, the sources list is not added.
   local url=$(echo $@ | cut -d' ' -f2)
   local repo_ok=$(
     curl \
       --silent \
       --head \
-      --connect-timeout 20 \
+      --connect-timeout 60 \
       $url | \
       egrep " 200 OK| 301 Moved Permanently" | \
       wc -l
