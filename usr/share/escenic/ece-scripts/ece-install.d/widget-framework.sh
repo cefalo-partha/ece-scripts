@@ -112,6 +112,7 @@ function install_widget_framework() {
   print_and_log "Installing Widget Framework on $HOSTNAME ..."
 
   ensure_variable_is_set wf_user wf_password
+  wget_auth="--http-user ${technet_user} --http-password ${technet_password}"
   download_and_extract_wf_archives_if_necessary
   create_maven_settings_file
 
