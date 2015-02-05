@@ -537,6 +537,8 @@ function set_appropriate_jvm_heap_sizes() {
     heap_size=${fai_all_heap_size-${default_app_server_heap_size}}
   elif [ $install_profile_number -eq $PROFILE_ANALYSIS_DB_SERVER ]; then
     heap_size=${fai_analysis_heap_size-${default_app_server_heap_size}}
+  elif [ $install_profile_number -eq $PROFILE_ANALYSIS_SERVER ]; then
+    heap_size=${fai_analysis_heap_size-${default_app_server_heap_size}}
   elif [ $install_profile_number -eq $PROFILE_SEARCH_SERVER ]; then
     heap_size=${fai_search_heap_size-${default_app_server_heap_size}}
   fi
