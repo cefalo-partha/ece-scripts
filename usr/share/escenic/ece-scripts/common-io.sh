@@ -183,7 +183,7 @@ function curl_download_uri_target_to_dir() {
     run cd $target_dir
     run curl \
       -L \
-      --o "$target_file" \
+      -o "$target_file" \
       $uri
   fi
 }
