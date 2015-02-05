@@ -285,15 +285,19 @@ function set_up_engine_and_plugins() {
   done
 
   if [ -n "$engine_dir" -a ! -d "${engine_dir}" ]; then
+    debug "Extracting ${engine_file}"
     run unzip -q -u -o $download_dir/${engine_file}
-    if [ -h engine ]; then
-      run rm engine
-    fi
-
-    run ln -s ${engine_dir} engine
   else
     debug "${engine_dir} is already there, skipping to next step."
   fi
+
+  ## Lets recreate the "engine" symlink regardless.
+  if [ -h engine ]; then
+    run rm engine
+  fi
+
+  run ln -s ${engine_dir} engine
+  debug "${engine_dir} is no symlinked to engine."
 
   # we now extract all the plugins. We extract them in $escenic_root_dir
   # as we want to re-use them between minor updates of ECE.
