@@ -83,7 +83,7 @@ force_packages=0
 ece_software_setup_completed=0
 
 ############################################################################
-# For ECE 5.5
+# For ECE 5.7
 ############################################################################
 technet_download_list="
   http://technet.escenic.com/downloads/release/57/analysis-engine-2.8.0.158573.zip
