@@ -5,12 +5,12 @@ memcached_java_lib_url=https://github.com/downloads/gwhalin/Memcached-Java-Clien
 function install_memory_cache()
 {
   print "Installing a distributed memory cache on $HOSTNAME ..."
-  
+
   install_packages_if_missing "memcached"
   if [ $on_redhat_or_derivative -eq 1 ]; then
     run /etc/init.d/memcached restart
   fi
-  
+
   assert_commands_available memcached
 
   print_and_log "Downloading the memcached java library ..."
@@ -25,10 +25,10 @@ function install_memory_cache()
 }
 
 function memcached_set_up_common_nursery() {
-  local dir=$common_nursery_dir/com/danga
+  local dir=$common_nursery_dir/com/whalin/
   make_dir $dir
   cat > $dir/SockIOPool.properties <<EOF
-\$class=com.danga.MemCached.SockIOPool
+\$class=com.whalin.MemCached.SockIOPool
 # fill in memcached servers here.
 servers=${fai_memcached_node_list-localhost:11211}
 
@@ -49,6 +49,6 @@ EOF
   cat >> $common_nursery_dir/Initial.properties <<EOF
 
 # using memcached, added by $(basename $0) @ $(date --iso)
-service.0.0-memcached-socket-pool=/com/danga/SockIOPool
+service.0.0-memcached-socket-pool=/com/whalin/SockIOPool
 EOF
 }
