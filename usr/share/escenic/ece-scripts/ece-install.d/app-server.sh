@@ -487,13 +487,13 @@ EOF
        -r //TMP -v Environment \
        -s /Context -t elem -n TMP -v '' \
        -i /Context/TMP -t attr -n name -v escenic/head-tail-storage-file \
-       -i /Context/TMP -t attr -n value -v $escenic_data_dir/engine/head-tail.index \
+       -i /Context/TMP -t attr -n value -v $escenic_data_dir/head-tail.index \
        -i /Context/TMP -t attr -n type -v java.lang.String \
        -i /Context/TMP -t attr -n override -v false \
        -r //TMP -v Environment \
        -s /Context -t elem -n TMP -v '' \
        -i /Context/TMP -t attr -n name -v escenic/failing-documents-storage-file \
-       -i /Context/TMP -t attr -n value -v $escenic_data_dir/engine/failures.index \
+       -i /Context/TMP -t attr -n value -v $escenic_data_dir/failures.index \
        -i /Context/TMP -t attr -n type -v java.lang.String \
        -i /Context/TMP -t attr -n override -v false \
        -r //TMP -v Environment \
