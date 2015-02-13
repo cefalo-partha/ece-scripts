@@ -197,10 +197,9 @@ lower_case_table_names=1' > /etc/mysql/conf.d/escenic.cnf
 
     if [ $on_redhat_or_derivative -eq 1 ]; then
       run chkconfig --level 35 mysql on
-      run /etc/init.d/mysql restart
-    else
-      run service mysql restart
     fi
+
+    run /etc/init.d/mysql restart
 
     assert_commands_available mysqld
   else
