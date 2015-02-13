@@ -186,6 +186,13 @@ function install_mysql_server_software() {
 
   if [ ${fai_db_sql_only-0} -eq 0 ]; then
     install_packages_if_missing $mysql_server_packages
+
+    # Create the lower case table name configuration for ubuntu
+    # FIXME: Temporary hack for making things work with my setup.
+    echo '[mysqld]
+lower_case_table_names=1' > /etc/mysql/conf.d/escenic.cnf
+
+
     force_packages=0
 
     if [ $on_redhat_or_derivative -eq 1 ]; then
