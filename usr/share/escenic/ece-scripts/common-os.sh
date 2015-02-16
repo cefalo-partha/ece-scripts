@@ -8,7 +8,7 @@
 common_bashing_is_loaded > /dev/null 2>&1 || source $(pwd)/common-bashing.sh
 
 ## Only used if the Tomcat download mirror couldn't be determined
-fallback_tomcat_url="http://www.eu.apache.org/dist/tomcat/tomcat-8/v8.0.18/bin/apache-tomcat-8.0.18.tar.gz"
+fallback_tomcat_url="http://www.eu.apache.org/dist/tomcat/tomcat-7/v7.0.59/bin/apache-tomcat-7.0.59.tar.gz"
 
 # Can be used like this:
 # common_io_os_loaded 2>/dev/null || source common-os.sh
@@ -130,7 +130,7 @@ function get_tomcat_download_url() {
     local url=$tomcat_download
   else
     local url=$(
-        curl -s http://tomcat.apache.org/download-80.cgi | \
+        curl -s http://tomcat.apache.org/download-70.cgi | \
             grep tar.gz | \
             head -1 | \
             cut -d'"' -f2
