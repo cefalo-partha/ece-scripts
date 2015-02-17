@@ -120,7 +120,10 @@ function set_up_app_server() {
   else
     search_host=${fai_search_host-$HOSTNAME}
     search_port=${fai_search_port-$default_app_server_port}
+    echo "DEBUG: In the search_host block: $search_host:$search_port"
   fi
+
+  echo "DEBUG: Should have search stuff configured: $search_host:$search_port"
 
   download_tomcat $download_dir
   local tomcat_archive=$(
