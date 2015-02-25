@@ -91,20 +91,17 @@ function is_supported() {
 
 function add_gpg_key() {
   local key=$percona_ubuntu_gpg_key
+  local gpg_key_url="http://www.percona.com/redir/downloads/RPM-GPG-KEY-percona"
   if [ $db_vendor = "mariadb" ]; then
     key=$mariadb_ubuntu_gpg_key
+    gpg_key_url="https://yum.mariadb.org/RPM-GPG-KEY-MariaDB"
   fi
   if [ $(apt-key list| grep ${key: -8} | wc -l) -lt 1 ]; then
-        # this CANNOT be run in the run wrapper since it often fails,
-        # see comment below.
-    gpg --keyserver hkp://keys.gnupg.net:80 \
-        --recv-keys $key \
-        1>>$log 2>>$log
+    # The standard gpg command causes issues really often. Sometimes multiple
+    # times per day. So, we do a more stable thing.
+    wget -O - $gpg_key_url | gpg --import
 
-        # There has been three times now, during six months, that the
-        # key cannot be retrieved from keys.gnupg.net. Therefore,
-        # we're checking if it failed and if yes, force the package
-        # installation.
+    # The stupid GPG key thing often fails. So, we need to do this
     if [ $? -gt 0 ]; then
       print_and_log "Failed retrieving the gpg key for $db_vendor from keys.gnupg.net." \
           "Will install the database packages without the GPG key"
